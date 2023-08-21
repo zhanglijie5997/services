@@ -4,18 +4,20 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"service/db/order"
 	"service/db/user"
 	"time"
 )
 
 var DB *gorm.DB
-func Db()  {
+
+func Db() {
 	dsn := "root:Zhang1996@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Print("数据库链接失败")
+		return
 	}
-	fmt.Println("数据库链接成功")
 	sqlDB, _ := db.DB()
 	// SetMaxIdleConns 设置空闲连接池中连接的最大数量
 	sqlDB.SetMaxIdleConns(10)
@@ -29,7 +31,8 @@ func Db()  {
 
 }
 
-func dbViewInit()  {
+func dbViewInit() {
 	// 用户表
-	user.UserDb(DB)
+	user.UserDbInit(DB)
+	order.OrderDbinit(DB)
 }
